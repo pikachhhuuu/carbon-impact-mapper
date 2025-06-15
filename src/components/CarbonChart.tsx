@@ -13,6 +13,13 @@ interface CarbonChartProps {
   data: CarbonFootprint;
 }
 
+interface ChartDataItem {
+  category: string;
+  value: number;
+  color: string;
+  icon: string;
+}
+
 const CarbonChart: React.FC<CarbonChartProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -30,7 +37,7 @@ const CarbonChart: React.FC<CarbonChartProps> = ({ data }) => {
     const chartHeight = height - margin.top - margin.bottom;
 
     // Prepare data for visualization
-    const chartData = [
+    const chartData: ChartDataItem[] = [
       { category: 'Electricity', value: data.electricity, color: '#f59e0b', icon: '⚡' },
       { category: 'Transport', value: data.transport, color: '#3b82f6', icon: '🚗' },
       { category: 'Food', value: data.food, color: '#f97316', icon: '🍽️' }
@@ -146,9 +153,9 @@ const CarbonChart: React.FC<CarbonChartProps> = ({ data }) => {
       .select('.domain')
       .attr('stroke', '#d1d5db');
 
-    // Add hover effects
+    // Add hover effects with proper typing
     bars.selectAll('rect:last-child')
-      .on('mouseover', function(event, d) {
+      .on('mouseover', function(event: MouseEvent, d: ChartDataItem) {
         d3.select(this)
           .transition()
           .duration(200)
